@@ -1,5 +1,9 @@
 # Industrial Surface Crack Detection using CNN
 
+[![Kaggle Dataset](https://img.shields.io/badge/Dataset-Kaggle-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/arunrk7/surface-crack-detection/data)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+
 An end-to-end Deep Learning solution for automated **Industrial Surface Crack Detection** built with **TensorFlow / Keras**. This system processes surface images, automatically splits them into training, validation, and test datasets, applies real-time data augmentation, trains a custom 4-block Convolutional Neural Network (CNN), evaluates performance with detailed metrics, and performs single-image inference.
 
 ---
@@ -74,12 +78,36 @@ pip install -r requirements.txt
 
 ## 📊 Dataset Preparation
 
-Organize your raw image dataset inside the `CrackDataset` folder before running the script:
+### ⬇️ Step 1 — Download the Dataset
+
+This project uses the **Surface Crack Detection** dataset by Arun Rk, available on Kaggle:
+
+👉 **[https://www.kaggle.com/datasets/arunrk7/surface-crack-detection/data](https://www.kaggle.com/datasets/arunrk7/surface-crack-detection/data)**
+
+**Download via Kaggle CLI** (fastest method):
+```bash
+# Install Kaggle CLI if not already installed
+pip install kaggle
+
+# Download and unzip the dataset
+kaggle datasets download -d arunrk7/surface-crack-detection --unzip
+```
+> 📝 You'll need a Kaggle account and an API token (`~/.kaggle/kaggle.json`). See [Kaggle API setup guide](https://www.kaggle.com/docs/api).
+
+**Or download manually:**
+1. Visit the dataset page above and click **Download**
+2. Extract the ZIP file
+
+---
+
+### 📁 Step 2 — Organize the Dataset
+
+After downloading, place the images inside the `CrackDataset` folder in the project root:
 
 ```
 CrackDataset/
-├── Positive/   <-- Place all images showing surface cracks here
-└── Negative/   <-- Place all images with clean/smooth surfaces here
+├── Positive/   <-- All images showing surface cracks (~20,000 images)
+└── Negative/   <-- All images with clean/smooth surfaces (~20,000 images)
 ```
 
 > **Supported Image Formats**: `.jpg`, `.jpeg`, `.png`, `.bmp`, `.webp`
@@ -143,4 +171,5 @@ Upon successful execution, the following files are saved in the project root:
 
 ## 🤝 Acknowledgments
 
-Developed as part of the **Marvellous Infosystems** Deep Learning curriculum for Industrial Surface Crack Detection.
+- **Dataset**: [Surface Crack Detection](https://www.kaggle.com/datasets/arunrk7/surface-crack-detection/data) by **Arun Rk** on Kaggle — 40,000 high-resolution surface images (227×227 px) evenly split between cracked and non-cracked surfaces.
+- Developed as part of the **Marvellous Infosystems** Deep Learning curriculum for Industrial Surface Crack Detection.
