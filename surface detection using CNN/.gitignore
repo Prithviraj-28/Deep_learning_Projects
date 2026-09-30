@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# IDE & Editor configurations
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Deep Learning Auto-generated Datasets & Model Artifacts
+Processed_CrackDataset/
+*.keras
+*.h5
+*.hdf5
+*.ckpt
+*.tflite
+*.onnx
+*.pb
+
+# Temporary folders
+temp_repo/
