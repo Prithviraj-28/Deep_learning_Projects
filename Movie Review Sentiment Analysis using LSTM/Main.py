@@ -53,43 +53,49 @@ def display_sample_reviews(X_train, Y_train, reverse_index: dict,
         review_text = decode_review(X_train[i], reverse_index)
         print(f"\n  Review #{i + 1}  |  Sentiment: {sentiment}")
         print(f"  {review_text[:150]} ...")
-        print("  " + "." * 56)
 
 
 def pad_data(X_train, X_test, max_length: int):
     """Pad or truncate all reviews to the same fixed length."""
     X_train_padded = pad_sequences(X_train, maxlen=max_length)
     X_test_padded  = pad_sequences(X_test,  maxlen=max_length)
-    print(f"\nPadding complete.")
-    print(f"   Training shape : {X_train_padded.shape}")
-    print(f"   Testing  shape : {X_test_padded.shape}")
+    print(f"\nPadding complete | Training shape: {X_train_padded.shape} | Testing shape: {X_test_padded.shape}")
     return X_train_padded, X_test_padded
 
 
-# Step 9 - Build the LSTM Model
 def build_model(vocab_size: int, embedding_dim: int, lstm_units: int) -> Sequential:
-    """
-    Construct the LSTM sentiment-classification model.
-    Architecture: Embedding -> LSTM -> Dense (sigmoid)
-    """
+    """Construct the LSTM sentiment-classification model."""
     model = Sequential([
-        # Maps each word-index to a dense embedding vector
         Embedding(input_dim=vocab_size, output_dim=embedding_dim),
-        # Captures sequential context across the review
         LSTM(units=lstm_units),
-        # Single sigmoid output: probability of Positive sentiment
         Dense(units=1, activation="sigmoid"),
     ])
     return model
 
 
-# Step 10 - Compile the Model
 def compile_model(model: Sequential) -> None:
     """Compile with Adam optimizer and binary cross-entropy loss."""
-    model.compile(
-        optimizer="adam",
-        loss="binary_crossentropy",
-        metrics=["accuracy"],
-    )
+    model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
     print("\nModel compiled successfully.")
     model.summary()
+
+
+# Step 11 - Train the Model
+def train_model(model: Sequential, X_train, Y_train,
+                epochs: int, batch_size: int, val_split: float) -> None:
+    """Fit the model on the padded training data."""
+    print("\nTraining model ...")
+    model.fit(
+        X_train, Y_train,
+        epochs=epochs,
+        batch_size=batch_size,
+        validation_split=val_split,
+    )
+    print("Training complete.")
+
+
+# Step 12 - Evaluate the Model
+def evaluate_model(model: Sequential, X_test, Y_test) -> None:
+    """Evaluate and print test loss and accuracy."""
+    loss, accuracy = model.evaluate(X_test, Y_test, verbose=0)
+    print(f"\nTest Results  |  Loss: {loss:.4f}  |  Accuracy: {accuracy * 100:.2f}%")
