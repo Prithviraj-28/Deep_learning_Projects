@@ -5,13 +5,11 @@ Author  : Marvellous
 License : MIT
 """
 
-# Step 1 - Import Required Libraries
 from tensorflow.keras.datasets import imdb
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-# Step 2 - Hyper-parameters / Configuration
 VOCAB_SIZE    = 10_000
 MAX_LENGTH    = 200
 EMBEDDING_DIM = 32
@@ -21,7 +19,6 @@ BATCH_SIZE    = 64
 VAL_SPLIT     = 0.2
 
 
-# Step 3 - Load the IMDB Dataset
 def load_dataset(vocab_size: int):
     """Download and return the IMDB train/test split."""
     print("Loading IMDB dataset ...")
@@ -32,7 +29,6 @@ def load_dataset(vocab_size: int):
     return (X_train, Y_train), (X_test, Y_test)
 
 
-# Step 4 & 5 - Build Word Index and Reverse Word Index
 def build_reverse_index() -> dict:
     """Fetch the IMDB word-to-integer mapping and invert it."""
     word_index    = imdb.get_word_index()
@@ -40,8 +36,33 @@ def build_reverse_index() -> dict:
     return reverse_index
 
 
-# Step 6 - Decode an Encoded Review Back to Plain Text
 def decode_review(encoded_review: list, reverse_index: dict) -> str:
     """Convert a list of integers back into a readable sentence."""
     words = [reverse_index.get(idx, "?") for idx in encoded_review if idx >= 3]
     return " ".join(words)
+
+
+# Step 7 - Display Sample Reviews
+def display_sample_reviews(X_train, Y_train, reverse_index: dict,
+                            start: int = 3, end: int = 7) -> None:
+    """Print decoded training reviews with their true sentiment."""
+    print("\n" + "-" * 60)
+    print("  SAMPLE REVIEWS")
+    print("-" * 60)
+    for i in range(start, end):
+        sentiment   = "Positive" if Y_train[i] == 1 else "Negative"
+        review_text = decode_review(X_train[i], reverse_index)
+        print(f"\n  Review #{i + 1}  |  Sentiment: {sentiment}")
+        print(f"  {review_text[:150]} ...")
+        print("  " + "." * 56)
+
+
+# Step 8 - Pad Sequences to a Fixed Length
+def pad_data(X_train, X_test, max_length: int):
+    """Pad or truncate all reviews to the same fixed length."""
+    X_train_padded = pad_sequences(X_train, maxlen=max_length)
+    X_test_padded  = pad_sequences(X_test,  maxlen=max_length)
+    print(f"\nPadding complete.")
+    print(f"   Training shape : {X_train_padded.shape}")
+    print(f"   Testing  shape : {X_test_padded.shape}")
+    return X_train_padded, X_test_padded
