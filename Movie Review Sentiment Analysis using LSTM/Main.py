@@ -42,7 +42,6 @@ def decode_review(encoded_review: list, reverse_index: dict) -> str:
     return " ".join(words)
 
 
-# Step 7 - Display Sample Reviews
 def display_sample_reviews(X_train, Y_train, reverse_index: dict,
                             start: int = 3, end: int = 7) -> None:
     """Print decoded training reviews with their true sentiment."""
@@ -57,7 +56,6 @@ def display_sample_reviews(X_train, Y_train, reverse_index: dict,
         print("  " + "." * 56)
 
 
-# Step 8 - Pad Sequences to a Fixed Length
 def pad_data(X_train, X_test, max_length: int):
     """Pad or truncate all reviews to the same fixed length."""
     X_train_padded = pad_sequences(X_train, maxlen=max_length)
@@ -66,3 +64,32 @@ def pad_data(X_train, X_test, max_length: int):
     print(f"   Training shape : {X_train_padded.shape}")
     print(f"   Testing  shape : {X_test_padded.shape}")
     return X_train_padded, X_test_padded
+
+
+# Step 9 - Build the LSTM Model
+def build_model(vocab_size: int, embedding_dim: int, lstm_units: int) -> Sequential:
+    """
+    Construct the LSTM sentiment-classification model.
+    Architecture: Embedding -> LSTM -> Dense (sigmoid)
+    """
+    model = Sequential([
+        # Maps each word-index to a dense embedding vector
+        Embedding(input_dim=vocab_size, output_dim=embedding_dim),
+        # Captures sequential context across the review
+        LSTM(units=lstm_units),
+        # Single sigmoid output: probability of Positive sentiment
+        Dense(units=1, activation="sigmoid"),
+    ])
+    return model
+
+
+# Step 10 - Compile the Model
+def compile_model(model: Sequential) -> None:
+    """Compile with Adam optimizer and binary cross-entropy loss."""
+    model.compile(
+        optimizer="adam",
+        loss="binary_crossentropy",
+        metrics=["accuracy"],
+    )
+    print("\nModel compiled successfully.")
+    model.summary()
